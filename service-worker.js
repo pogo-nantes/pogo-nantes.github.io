@@ -10,17 +10,15 @@ const FILES_TO_CACHE = [
   '/offline.html',
 ];
 
+const CONFIG_FILES = '/files/config.json';
+
 var subscriptionSaved = false;
 
 var applicationServerPublicKey = 'init';
 
 var subscription = 'init';
 
-//var SERVEUR_URL = 'http://localhost:3000'
-const SERVEUR_URL = $.getJSON("/files/config.json", function(data) 
-{
-	data.SERVEUR_URL;
-})
+var SERVEUR_URL = '';
 
 /**** UTILS ****/
 
@@ -81,11 +79,22 @@ self.addEventListener('install', (evt) =>
 	console.log('[ServiceWorker] Install');
 	// Precache static resources here.
 	evt.waitUntil
-	(
-		caches.open(CACHE_NAME).then((cache) => 
-		{
-			console.log('[ServiceWorker] Pre-caching offline page');
-			return cache.addAll(FILES_TO_CACHE);
+	(	
+	    caches.open(CACHE_NAME).then( function(cache) 
+		{ //  With the cache opened, load a JSON file containing an array of files to be cached
+			return fetch(CONFIG_FILES).then(function(response) 
+			{
+				return response.json(); // Once the contents are loaded, convert the raw text to a JavaScript object
+
+            }).then(function(files) 
+			{
+				console.log('[ServiceWorker Install] Serveur URL from JSON file: ', files.SERVEUR_URL); // this will log the cached json file 
+				
+				SERVEUR_URL = files.SERVEUR_URL;
+				
+                return cache.addAll(FILES_TO_CACHE); // Use cache.addAll just as you would a hardcoded array of items
+
+			});
 		})
 	);
 	self.skipWaiting();

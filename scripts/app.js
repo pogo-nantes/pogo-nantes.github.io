@@ -26,7 +26,9 @@ const raidApp =
 /********** Notification ********************/
 const SERVICE_WORKER = '/service-worker.js';
 
-const SERVEUR_URL = $.getJSON("/files/config.json", function(data) 
+const CONFIG_FILES = '/files/config.json';
+
+const SERVEUR_URL = $.getJSON(CONFIG_FILES, function(data) 
 {
 	data.SERVEUR_URL;
 })
