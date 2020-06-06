@@ -17,7 +17,10 @@ var applicationServerPublicKey = 'init';
 var subscription = 'init';
 
 //var SERVEUR_URL = 'http://localhost:3000'
-const SERVEUR_URL = 'https://expresstestapp.azurewebsites.net';
+const SERVEUR_URL = $.getJSON("/files/config.json", function(data) 
+{
+	data.SERVEUR_URL;
+})
 
 /**** UTILS ****/
 
